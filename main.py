@@ -1,39 +1,61 @@
 
-# APEX AI - Lesson 2
-# Business Development Lead Qualification
+# APEX AI - Lesson 5
+# Integrated Commercial Lead Intelligence
 
-def qualify_lead(company_name, industry, budget):
+from lead_scoring import calculate_lead_score
 
-    print("\n--- LEAD QUALIFICATION REPORT ---")
-    print(f"Company: {company_name}")
-    print(f"Industry: {industry}")
-    print(f"Estimated Contract Value: £{budget:,}")
 
-    if budget >= 100000:
-        priority = "HIGH"
-        recommendation = "Prioritise for sales outreach"
+def analyse_opportunity(company):
 
-    elif budget >= 50000:
-        priority = "MEDIUM"
-        recommendation = "Research further before outreach"
+    print("\n" + "=" * 50)
+    print("APEX AI - COMMERCIAL OPPORTUNITY ANALYSIS")
+    print("=" * 50)
 
-    else:
-        priority = "LOW"
-        recommendation = "Monitor for future opportunities"
+    score, priority = calculate_lead_score(
+        contract_value=company["contract_value"],
+        profit_margin=company["profit_margin"],
+        industry_match=company["industry_match"],
+        location_match=company["location_match"],
+        contract_months=company["contract_months"]
+    )
 
+    print(f"Company: {company['name']}")
+    print(f"Industry: {company['industry']}")
+    print(f"Contract Value: £{company['contract_value']:,}")
+    print(f"Estimated Profit Margin: {company['profit_margin']}%")
+    print(f"Lead Score: {score}/100")
     print(f"Lead Priority: {priority}")
+
+    if priority == "HIGH":
+        recommendation = "Prepare a commercial proposal"
+    elif priority == "MEDIUM":
+        recommendation = "Conduct further qualification"
+    else:
+        recommendation = "Monitor opportunity"
+
     print(f"Recommendation: {recommendation}")
+
+    return {
+        "company": company["name"],
+        "score": score,
+        "priority": priority,
+        "recommendation": recommendation
+    }
 
 
 def main():
 
-    print("APEX AI - AUTONOMOUS COMMERCIAL AGENT")
+    company = {
+        "name": "London Commercial Properties Ltd",
+        "industry": "Commercial Real Estate",
+        "contract_value": 150000,
+        "profit_margin": 22,
+        "industry_match": True,
+        "location_match": True,
+        "contract_months": 36
+    }
 
-    qualify_lead(
-        company_name="London Commercial Properties Ltd",
-        industry="Commercial Real Estate",
-        budget=150000
-    )
+    analyse_opportunity(company)
 
 
 if __name__ == "__main__":
